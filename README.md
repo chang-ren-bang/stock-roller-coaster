@@ -43,7 +43,7 @@
 
 此專案將部署於 GitHub Pages，網址為：
 
-[https://chang-ren-bang.github.io/stock-roller-coaster/](https://chang-ren-bang.github.io/stock-roller-coaster/)
+[https://chang-ren-bang.github.io/stock-roller-coaster/dist/](https://chang-ren-bang.github.io/stock-roller-coaster/dist/)
 
 GitHub Pages 會使用 **`dist/` 目錄中的靜態檔案** 作為網站內容。  
 每次更新程式後，請執行：
