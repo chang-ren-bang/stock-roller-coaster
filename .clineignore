@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build/
+.git/
+.vscode/
+.env
+*.log
+*.lock
+*.tmp
+.idea/
+.DS_Store
