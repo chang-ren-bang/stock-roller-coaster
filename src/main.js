@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
-let memeTextures = [];
+let leftTextures = [];
+let rightTextures = [];
 
 let scene, camera, renderer;
 let curve, curvePoints;
@@ -18,11 +19,17 @@ animate();
 
 function init() {
   const loader = new THREE.TextureLoader();
-  memeTextures = [
-    loader.load('img/image1.jpg'),
-    loader.load('img/image2.jpg'),
-    loader.load('img/image3.jpg'),
-    loader.load('img/image4.jpg'),
+  leftTextures = [
+    loader.load('img/image_L_1.jpg'),
+    loader.load('img/image_L_2.jpg'),
+    loader.load('img/image_L_3.jpg'),
+    loader.load('img/image_L_4.jpg'),
+  ];
+  rightTextures = [
+    loader.load('img/image_R_1.jpg'),
+    loader.load('img/image_R_2.jpg'),
+    loader.load('img/image_R_3.jpg'),
+    loader.load('img/image_R_4.jpg'),
   ];
 
   scene = new THREE.Scene();
@@ -107,16 +114,16 @@ function init() {
   for (let i = 0; i < objectCount; i++) {
     const t = Math.random(); // 0~1
     const point = curve.getPointAt(t);
-    const tangent = curve.getTangentAt(t);
-    const normal = new THREE.Vector3(0, 1, 0).cross(tangent).normalize();
 
-    const side = Math.random() < 0.5 ? 1 : -1;
-    const offset = normal.clone().multiplyScalar(2 * side); // 偏移2單位
+    const side = Math.random() < 0.5 ? -1 : 1; // -1 左側, 1 右側
+    const offset = new THREE.Vector3(0, 0, 2 * side); // 沿z軸偏移1單位，較遠離軌道
     const pos = point.clone().add(offset);
 
     const size = 0.5 + Math.random() * 0.5;
     const geometry = new THREE.BoxGeometry(size, size, size);
-    const randomTexture = memeTextures[Math.floor(Math.random() * memeTextures.length)];
+    const isLeft = side < 0;
+    const textureArray = isLeft ? leftTextures : rightTextures;
+    const randomTexture = textureArray[Math.floor(Math.random() * textureArray.length)];
     const material = new THREE.MeshStandardMaterial({ map: randomTexture });
     const obj = new THREE.Mesh(geometry, material);
     obj.position.copy(pos);

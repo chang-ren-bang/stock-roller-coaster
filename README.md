@@ -93,13 +93,15 @@ package.json
 
 ## 迷因圖素材管理
 
-- 所有迷因圖請放置於 `public/img/` 資料夾
+- 所有貼圖請放置於 `public/img/` 資料夾
 - Vite 打包時會自動將 `public/` 內所有檔案複製到 `dist/`
-- 遊戲中會隨機載入 `img/image1.jpg` ~ `image4.jpg` 作為貼圖
-- 若要新增或替換迷因圖：
+- 遊戲中會根據左右側分別載入貼圖：
+  - **左側物體**：`img/image_L_1.jpg` ~ `img/image_L_4.jpg`
+  - **右側物體**：`img/image_R_1.jpg` ~ `img/image_R_4.jpg`
+- 若要新增或替換貼圖：
   1. 將新圖檔放入 `public/img/`
-  2. 確保檔名符合 `imageX.jpg` 格式
-  3. 修改 `src/main.js` 中 `memeTextures` 陣列，加入或調整圖片路徑
+  2. 左側貼圖命名為 `image_L_編號.jpg`，右側貼圖命名為 `image_R_編號.jpg`
+  3. 修改 `src/main.js` 中 `leftTextures` 與 `rightTextures` 陣列，加入或調整圖片路徑
   4. 重新執行 `npm run build`，更新 `dist/`
 
 ---
