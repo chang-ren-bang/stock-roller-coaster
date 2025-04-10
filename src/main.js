@@ -17,6 +17,20 @@ const sideCtx = sideCanvas.getContext('2d');
 init();
 animate();
 
+function createSolidColorCubeTexture(colorHex) {
+  const size = 16;
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#' + colorHex.toString(16).padStart(6, '0');
+  ctx.fillRect(0, 0, size, size);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  const cubeTexture = new THREE.CubeTexture([texture, texture, texture, texture, texture, texture]);
+  cubeTexture.needsUpdate = true;
+  return cubeTexture;
+}
+
 function init() {
   const loader = new THREE.TextureLoader();
   leftTextures = [
@@ -32,8 +46,11 @@ function init() {
     loader.load('img/image_R_4.jpg'),
   ];
 
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x000000);
+scene = new THREE.Scene();
+scene.background = new THREE.Color(0x87ceeb); // 天空藍
+
+  const envMap = createSolidColorCubeTexture(0xffffff); // 純白色
+  scene.environment = envMap;
 
   const width = window.innerWidth;
   const height = window.innerHeight * 0.9;
@@ -44,10 +61,11 @@ function init() {
   renderer.setSize(width, height);
 
   // 燈光
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-  scene.add(ambientLight);
-  const pointLight = new THREE.PointLight(0xffffff, 1);
-  scene.add(pointLight);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+scene.add(ambientLight);
+const pointLight = new THREE.PointLight(0xffffaa, 80, 100, 0.5);
+scene.add(pointLight);
+pointLight.position.set(50, 50, 0);
 
   // 隨機產生較平滑的軌道曲線
   curvePoints = [];
@@ -93,12 +111,55 @@ function init() {
   const leftRail = new THREE.Line(leftGeometry, railMaterial);
   const rightRail = new THREE.Line(rightGeometry, railMaterial);
 
-  scene.add(leftRail);
-  scene.add(rightRail);
+scene.add(leftRail);
+scene.add(rightRail);
+
+// === 軌道平面 ===
+const trackVertices = [];
+const indices = [];
+const leftCount = leftPoints.length;
+
+for (let i = 0; i < leftCount; i++) {
+  const lp = leftPoints[i];
+  const rp = rightPoints[i];
+  trackVertices.push(lp.x, lp.y, lp.z);
+  trackVertices.push(rp.x, rp.y, rp.z);
+}
+
+for (let i = 0; i < leftCount - 1; i++) {
+  const a = i * 2;
+  const b = a + 1;
+  const c = a + 2;
+  const d = a + 3;
+  // 第一個三角形
+  indices.push(a, b, d);
+  // 第二個三角形
+  indices.push(a, d, c);
+}
+
+const trackGeometry = new THREE.BufferGeometry();
+trackGeometry.setAttribute('position', new THREE.Float32BufferAttribute(trackVertices, 3));
+trackGeometry.setIndex(indices);
+trackGeometry.computeVertexNormals();
+
+const trackMaterial = new THREE.MeshStandardMaterial({
+  color: 0xcccccc,
+  side: THREE.DoubleSide,
+  metalness: 0.5,
+  roughness: 0.3,
+  envMap: envMap,
+});
+const trackMesh = new THREE.Mesh(trackGeometry, trackMaterial);
+scene.add(trackMesh);
 
   // 過山車車廂
   const cartGeometry = new THREE.BoxGeometry(0.3, 0.1, 0.4);
-  const cartMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+  const cartMaterial = new THREE.MeshStandardMaterial({
+  color: 0x00ff00,
+  metalness: 0.5,
+  roughness: 0.3,
+  envMap: envMap,
+});
   cart = new THREE.Mesh(cartGeometry, cartMaterial);
   scene.add(cart);
 
@@ -124,7 +185,12 @@ function init() {
     const isLeft = side < 0;
     const textureArray = isLeft ? leftTextures : rightTextures;
     const randomTexture = textureArray[Math.floor(Math.random() * textureArray.length)];
-    const material = new THREE.MeshStandardMaterial({ map: randomTexture });
+    const material = new THREE.MeshStandardMaterial({
+  map: randomTexture,
+  metalness: 0.5,
+  roughness: 0.3,
+  envMap: envMap,
+});
     const obj = new THREE.Mesh(geometry, material);
     obj.position.copy(pos);
     scene.add(obj);
