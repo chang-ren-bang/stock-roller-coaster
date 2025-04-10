@@ -31,14 +31,32 @@ function init() {
   const pointLight = new THREE.PointLight(0xffffff, 1);
   scene.add(pointLight);
 
-  // 隨機產生軌道曲線
+  // 隨機產生較平滑的軌道曲線
   curvePoints = [];
   let x = 0;
+  const rawY = [];
   for (let i = 0; i < 100; i++) {
     x += Math.random() * 1 + 0.5; // 保持向前
-    const y = (Math.random() - 0.5) * 4; // 上下起伏
-    curvePoints.push(new THREE.Vector3(x, y, 0));
+    rawY.push((Math.random() - 0.5) * 2); // 改為較小範圍 (-1,1)
+    curvePoints.push(new THREE.Vector3(x, 0, 0)); // 先放0，稍後平滑
   }
+
+  // 移動平均平滑
+  const windowSize = 5;
+  for (let i = 0; i < rawY.length; i++) {
+    let sum = 0;
+    let count = 0;
+    for (let j = -Math.floor(windowSize / 2); j <= Math.floor(windowSize / 2); j++) {
+      const idx = i + j;
+      if (idx >= 0 && idx < rawY.length) {
+        sum += rawY[idx];
+        count++;
+      }
+    }
+    const avgY = sum / count;
+    curvePoints[i].y = avgY;
+  }
+
   curve = new THREE.CatmullRomCurve3(curvePoints);
 
   // 計算速度
