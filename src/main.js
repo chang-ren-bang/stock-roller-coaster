@@ -6,7 +6,8 @@ let scene, camera, renderer;
 let curve, curvePoints;
 let progress = 0;
 let cart;
-let totalTime = 20; // 20秒動畫
+let cameraHolder;
+let totalTime = 30; // 30秒動畫
 let speed; // 依曲線長度計算速度
 
 const sideCanvas = document.getElementById('side-canvas');
@@ -94,6 +95,12 @@ function init() {
   cart = new THREE.Mesh(cartGeometry, cartMaterial);
   scene.add(cart);
 
+  // 建立攝影機掛載點
+  cameraHolder = new THREE.Object3D();
+  cameraHolder.position.set(0, 0.2, 0.5); // 車頂更後方 (修正方向)
+  cart.add(cameraHolder);
+  cameraHolder.add(camera);
+
   // 軌道兩側隨機物件
   const objectCount = 50;
   const curveSamplePoints = curve.getPoints(500);
@@ -130,12 +137,12 @@ function animate() {
   const tangent = curve.getTangentAt(progress);
 
   cart.position.copy(pos);
-  cart.lookAt(pos.clone().add(tangent));
+  const up = new THREE.Vector3(0, 1, 0);
+  const m = new THREE.Matrix4();
+  m.lookAt(pos, pos.clone().add(tangent), up);
+  cart.quaternion.setFromRotationMatrix(m);
 
-  // 相機放在車廂稍後方，模擬第一人稱
-  const cameraOffset = tangent.clone().multiplyScalar(-1).add(new THREE.Vector3(0, 0.2, 0));
-  camera.position.copy(pos.clone().add(cameraOffset));
-  camera.lookAt(pos.clone().add(tangent));
+  camera.lookAt(cart.position);
 
   renderer.render(scene, camera);
 
