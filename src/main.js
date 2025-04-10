@@ -84,6 +84,27 @@ function init() {
   cart = new THREE.Mesh(cartGeometry, cartMaterial);
   scene.add(cart);
 
+  // 軌道兩側隨機物件
+  const objectCount = 50;
+  const curveSamplePoints = curve.getPoints(500);
+  for (let i = 0; i < objectCount; i++) {
+    const t = Math.random(); // 0~1
+    const point = curve.getPointAt(t);
+    const tangent = curve.getTangentAt(t);
+    const normal = new THREE.Vector3(0, 1, 0).cross(tangent).normalize();
+
+    const side = Math.random() < 0.5 ? 1 : -1;
+    const offset = normal.clone().multiplyScalar(2 * side); // 偏移2單位
+    const pos = point.clone().add(offset);
+
+    const size = 0.5 + Math.random() * 0.5;
+    const geometry = new THREE.BoxGeometry(size, size, size);
+    const material = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff });
+    const obj = new THREE.Mesh(geometry, material);
+    obj.position.copy(pos);
+    scene.add(obj);
+  }
+
   window.addEventListener('resize', onWindowResize, false);
   onWindowResize();
 }
