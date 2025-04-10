@@ -45,7 +45,15 @@
 
 [https://chang-ren-bang.github.io/stock-roller-coaster/](https://chang-ren-bang.github.io/stock-roller-coaster/)
 
-每次 push 至 main 分支後，GitHub Pages 會自動更新 demo 版本。
+GitHub Pages 會使用 **`dist/` 目錄中的靜態檔案** 作為網站內容。  
+每次更新程式後，請執行：
+
+```
+npm run build
+```
+
+以重新產生 `dist/` 目錄，並將其內容 push 至 GitHub，  
+確保線上 demo 為最新版本。
 
 ---
 
