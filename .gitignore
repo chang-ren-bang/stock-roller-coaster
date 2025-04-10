@@ -19,3 +19,7 @@ yarn-error.log*
 # IDE files
 .vscode/
 .idea/
+
+# Allow dist folder for GitHub Pages
+!dist/
+!dist/**
