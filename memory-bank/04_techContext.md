@@ -11,6 +11,8 @@
 ## 開發環境
 - 作業系統：跨平台（Windows、macOS、Linux）
 - 編輯器/IDE：VSCode
+- AI 協作工具：Cline
+- 語言模型：OpenRouter，使用 `openrouter/quasar-alpha`
 - 版本控制：Git
 - CI/CD 工具：可選，初期以本地開發為主
 

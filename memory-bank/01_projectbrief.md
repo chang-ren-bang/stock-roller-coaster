@@ -18,6 +18,8 @@
 ## 預期成果
 一款可在瀏覽器中運行的第一人稱過山車模擬遊戲，結合視覺化的市場因素展示，寓教於樂地呈現股市波動。
 
+本專案採用 Visual Studio Code，結合 Cline 與 OpenRouter (`openrouter/quasar-alpha` 模型) 進行 AI 輔助開發與知識管理。
+
 ## 相關利害關係人
 - 專案發起人
 - 前端開發者

@@ -23,6 +23,25 @@
 
 ---
 
+## 開發工具與 AI 助理
+
+- **編輯器**：Visual Studio Code
+- **AI 協作工具**：Cline
+- **語言模型**：OpenRouter，使用 `openrouter/quasar-alpha`
+
+---
+
+### Memory Bank 自文件機制
+
+本專案結合 **Cline** 的 **Memory Bank** 自文件機制，  
+自動記錄專案背景、技術細節、架構設計與開發進度，  
+形成結構化知識庫，方便團隊協作與 AI 理解上下文。
+
+Memory Bank 會持續更新，確保專案資訊完整、可追溯，  
+並輔助 AI 生成更貼合專案需求的程式碼與文件。
+
+---
+
 ## 開發啟動
 
 1. 安裝依賴
