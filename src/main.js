@@ -97,14 +97,14 @@ function init() {
   scene.add(rightRail);
 
   // 過山車車廂
-  const cartGeometry = new THREE.BoxGeometry(0.25, 0.25, 0.25);
+  const cartGeometry = new THREE.BoxGeometry(0.3, 0.1, 0.4);
   const cartMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
   cart = new THREE.Mesh(cartGeometry, cartMaterial);
   scene.add(cart);
 
   // 建立攝影機掛載點
   cameraHolder = new THREE.Object3D();
-  cameraHolder.position.set(0, 0.2, 0.5); // 車頂更後方 (修正方向)
+  cameraHolder.position.set(0, 0.3, 0.3); // 車頂後方
   cart.add(cameraHolder);
   cameraHolder.add(camera);
 
@@ -149,7 +149,8 @@ function animate() {
   m.lookAt(pos, pos.clone().add(tangent), up);
   cart.quaternion.setFromRotationMatrix(m);
 
-  camera.lookAt(cart.position);
+  const lookAtTarget = cart.position.clone().add(new THREE.Vector3(0, 0.2, 0)); // 0.2 可調整
+  camera.lookAt(lookAtTarget);
 
   renderer.render(scene, camera);
 
