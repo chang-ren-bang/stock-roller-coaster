@@ -89,7 +89,7 @@ function init() {
   scene.add(rightRail);
 
   // 過山車車廂
-  const cartGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+  const cartGeometry = new THREE.BoxGeometry(0.25, 0.25, 0.25);
   const cartMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
   cart = new THREE.Mesh(cartGeometry, cartMaterial);
   scene.add(cart);
