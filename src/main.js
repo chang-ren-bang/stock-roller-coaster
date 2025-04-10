@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 
+let memeTextures = [];
+
 let scene, camera, renderer;
 let curve, curvePoints;
 let progress = 0;
@@ -14,6 +16,14 @@ init();
 animate();
 
 function init() {
+  const loader = new THREE.TextureLoader();
+  memeTextures = [
+    loader.load('img/image1.jpg'),
+    loader.load('img/image2.jpg'),
+    loader.load('img/image3.jpg'),
+    loader.load('img/image4.jpg'),
+  ];
+
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x000000);
 
@@ -99,7 +109,8 @@ function init() {
 
     const size = 0.5 + Math.random() * 0.5;
     const geometry = new THREE.BoxGeometry(size, size, size);
-    const material = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff });
+    const randomTexture = memeTextures[Math.floor(Math.random() * memeTextures.length)];
+    const material = new THREE.MeshStandardMaterial({ map: randomTexture });
     const obj = new THREE.Mesh(geometry, material);
     obj.position.copy(pos);
     scene.add(obj);
